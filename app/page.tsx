@@ -1,3 +1,3 @@
 export default function Home() {
-  return <div className="min-h-full bg-white" />;
+  return <div className="fixed inset-0 bg-white" />;
 }
