@@ -19,6 +19,9 @@ export default function Login() {
             <div className="flex justify-center animate-[scaleIn_0.6s_ease-out]">
               <Logo className="w-32 h-auto" />
             </div>
+            <h2 className="text-sm font-semibold text-gray-600 uppercase tracking-wider animate-[fadeInUp_0.8s_ease-out_0.15s_both]">
+              Human Resource Management Attendance System
+            </h2>
             <h1 className="text-2xl font-bold text-gray-900 animate-[fadeInUp_0.8s_ease-out_0.2s_both]">
               Welcome Back
             </h1>
@@ -72,18 +75,11 @@ export default function Login() {
 
             <button
               type="submit"
-              className="w-full py-3 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-semibold shadow-lg shadow-blue-200 hover:shadow-xl hover:shadow-blue-300 hover:scale-[1.02] active:scale-[0.98] transition-all duration-300"
+              className="w-full py-3 rounded-xl bg-[#1e3a5f] text-white font-semibold shadow-lg shadow-blue-200 hover:bg-[#162d4a] hover:shadow-xl hover:scale-[1.02] active:scale-[0.98] transition-all duration-300"
             >
-              Sign In
+              System Administrator Sign In
             </button>
           </form>
-
-          <p className="text-center text-sm text-gray-500 animate-[fadeInUp_0.8s_ease-out_0.5s_both]">
-            Don&apos;t have an account?{" "}
-            <a href="#" className="text-blue-600 hover:text-blue-700 font-medium transition-colors">
-              Sign up
-            </a>
-          </p>
         </div>
       </div>
 
