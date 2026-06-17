@@ -5,11 +5,11 @@ import "./globals.css";
 const notoSans = localFont({
   src: [
     {
-      path: "../public/Assets/Noto_Sans/NotoSans-VariableFont_wdth,wght.ttf",
+      path: "./fonts/Noto_Sans/NotoSans-VariableFont_wdth,wght.ttf",
       style: "normal",
     },
     {
-      path: "../public/Assets/Noto_Sans/NotoSans-Italic-VariableFont_wdth,wght.ttf",
+      path: "./fonts/Noto_Sans/NotoSans-Italic-VariableFont_wdth,wght.ttf",
       style: "italic",
     },
   ],
@@ -19,11 +19,11 @@ const notoSans = localFont({
 const playfairDisplay = localFont({
   src: [
     {
-      path: "../public/Assets/Playfair_Display/PlayfairDisplay-VariableFont_wght.ttf",
+      path: "./fonts/Playfair_Display/PlayfairDisplay-VariableFont_wght.ttf",
       style: "normal",
     },
     {
-      path: "../public/Assets/Playfair_Display/PlayfairDisplay-Italic-VariableFont_wght.ttf",
+      path: "./fonts/Playfair_Display/PlayfairDisplay-Italic-VariableFont_wght.ttf",
       style: "italic",
     },
   ],
