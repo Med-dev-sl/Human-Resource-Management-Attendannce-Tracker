@@ -36,6 +36,9 @@ yarn-error.log*
 # vercel
 .vercel
 
+# local font files (use next/font/google instead)
+/public/Assets
+
 # typescript
 *.tsbuildinfo
 next-env.d.ts
