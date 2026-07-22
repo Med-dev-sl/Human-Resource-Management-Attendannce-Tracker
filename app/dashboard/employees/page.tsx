@@ -80,7 +80,7 @@ export default function EmployeeList() {
   return (
     <div className="min-h-screen flex bg-gradient-to-br from-blue-50 via-white to-indigo-50">
       <DashboardSidebar user={user} onLogout={handleLogout} />
-      <main className="flex-1 lg:ml-72 min-h-screen">
+      <main className="flex-1 min-h-screen">
         <div className="p-6 lg:p-10 pt-20 lg:pt-10">
           <div style={{
             transform: mounted ? "translateY(0)" : "translateY(20px)",
