@@ -59,11 +59,21 @@ interface DashboardSidebarProps {
 export default function DashboardSidebar({ user, onLogout }: DashboardSidebarProps) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
+  const [counts, setCounts] = useState({ employees: 0, present: 0 });
   const pathname = usePathname();
   const router = useRouter();
 
   useEffect(() => {
     setMounted(true);
+    Promise.all([
+      fetch("/api/employees").then((r) => r.json()).catch(() => ({ employees: [] })),
+      fetch("/api/attendance/today").then((r) => r.json()).catch(() => ({ summary: {} })),
+    ]).then(([empData, attData]) => {
+      setCounts({
+        employees: empData.employees?.length || 0,
+        present: attData.summary?.present || 0,
+      });
+    });
   }, []);
 
   function handleNavigate(href: string) {
@@ -116,6 +126,7 @@ export default function DashboardSidebar({ user, onLogout }: DashboardSidebarPro
         <nav className="flex-1 px-3 py-6 space-y-1 overflow-y-auto">
           {navItems.map((item, index) => {
             const isActive = pathname === item.href;
+            const count = item.label === "Employees" ? counts.employees : item.label === "Attendance" ? counts.present : null;
             return (
               <button
                 key={item.href}
@@ -137,7 +148,12 @@ export default function DashboardSidebar({ user, onLogout }: DashboardSidebarPro
                 <span className={`relative z-10 transition-transform duration-300 ${isActive ? "scale-110" : "group-hover:scale-110"}`}>
                   {item.icon}
                 </span>
-                <span className="relative z-10">{item.label}</span>
+                <span className="relative z-10 flex-1 text-left">{item.label}</span>
+                {count !== null && (
+                  <span className="relative z-10 text-[10px] font-semibold px-2 py-0.5 rounded-full bg-white/10 text-white/70">
+                    {count}
+                  </span>
+                )}
                 {isActive && (
                   <span className="absolute inset-0 rounded-xl bg-gradient-to-r from-white/10 to-transparent animate-[fadeIn_0.3s_ease-out]" />
                 )}

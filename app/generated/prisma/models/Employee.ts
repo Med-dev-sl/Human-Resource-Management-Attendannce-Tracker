@@ -26,27 +26,87 @@ export type AggregateEmployee = {
 
 export type EmployeeMinAggregateOutputType = {
   id: string | null
-  name: string | null
+  employeeId: string | null
+  staffCategory: string | null
+  title: string | null
+  lastName: string | null
+  firstName: string | null
+  middleName: string | null
+  gender: string | null
+  dateOfBirth: Date | null
+  phone: string | null
   email: string | null
-  position: string | null
+  address: string | null
+  faculty: string | null
+  school: string | null
+  department: string | null
+  designation: string | null
+  employmentType: string | null
+  dateOfEmployment: Date | null
+  qualification: string | null
+  specialization: string | null
+  nextOfKinName: string | null
+  nextOfKinPhone: string | null
+  nextOfKinRelation: string | null
+  status: string | null
   createdAt: Date | null
   updatedAt: Date | null
 }
 
 export type EmployeeMaxAggregateOutputType = {
   id: string | null
-  name: string | null
+  employeeId: string | null
+  staffCategory: string | null
+  title: string | null
+  lastName: string | null
+  firstName: string | null
+  middleName: string | null
+  gender: string | null
+  dateOfBirth: Date | null
+  phone: string | null
   email: string | null
-  position: string | null
+  address: string | null
+  faculty: string | null
+  school: string | null
+  department: string | null
+  designation: string | null
+  employmentType: string | null
+  dateOfEmployment: Date | null
+  qualification: string | null
+  specialization: string | null
+  nextOfKinName: string | null
+  nextOfKinPhone: string | null
+  nextOfKinRelation: string | null
+  status: string | null
   createdAt: Date | null
   updatedAt: Date | null
 }
 
 export type EmployeeCountAggregateOutputType = {
   id: number
-  name: number
+  employeeId: number
+  staffCategory: number
+  title: number
+  lastName: number
+  firstName: number
+  middleName: number
+  gender: number
+  dateOfBirth: number
+  phone: number
   email: number
-  position: number
+  address: number
+  faculty: number
+  school: number
+  department: number
+  designation: number
+  employmentType: number
+  dateOfEmployment: number
+  qualification: number
+  specialization: number
+  nextOfKinName: number
+  nextOfKinPhone: number
+  nextOfKinRelation: number
+  status: number
   createdAt: number
   updatedAt: number
   _all: number
@@ -55,27 +115,87 @@ export type EmployeeCountAggregateOutputType = {
 
 export type EmployeeMinAggregateInputType = {
   id?: true
-  name?: true
+  employeeId?: true
+  staffCategory?: true
+  title?: true
+  lastName?: true
+  firstName?: true
+  middleName?: true
+  gender?: true
+  dateOfBirth?: true
+  phone?: true
   email?: true
-  position?: true
+  address?: true
+  faculty?: true
+  school?: true
+  department?: true
+  designation?: true
+  employmentType?: true
+  dateOfEmployment?: true
+  qualification?: true
+  specialization?: true
+  nextOfKinName?: true
+  nextOfKinPhone?: true
+  nextOfKinRelation?: true
+  status?: true
   createdAt?: true
   updatedAt?: true
 }
 
 export type EmployeeMaxAggregateInputType = {
   id?: true
-  name?: true
+  employeeId?: true
+  staffCategory?: true
+  title?: true
+  lastName?: true
+  firstName?: true
+  middleName?: true
+  gender?: true
+  dateOfBirth?: true
+  phone?: true
   email?: true
-  position?: true
+  address?: true
+  faculty?: true
+  school?: true
+  department?: true
+  designation?: true
+  employmentType?: true
+  dateOfEmployment?: true
+  qualification?: true
+  specialization?: true
+  nextOfKinName?: true
+  nextOfKinPhone?: true
+  nextOfKinRelation?: true
+  status?: true
   createdAt?: true
   updatedAt?: true
 }
 
 export type EmployeeCountAggregateInputType = {
   id?: true
-  name?: true
+  employeeId?: true
+  staffCategory?: true
+  title?: true
+  lastName?: true
+  firstName?: true
+  middleName?: true
+  gender?: true
+  dateOfBirth?: true
+  phone?: true
   email?: true
-  position?: true
+  address?: true
+  faculty?: true
+  school?: true
+  department?: true
+  designation?: true
+  employmentType?: true
+  dateOfEmployment?: true
+  qualification?: true
+  specialization?: true
+  nextOfKinName?: true
+  nextOfKinPhone?: true
+  nextOfKinRelation?: true
+  status?: true
   createdAt?: true
   updatedAt?: true
   _all?: true
@@ -155,9 +275,29 @@ export type EmployeeGroupByArgs<ExtArgs extends runtime.Types.Extensions.Interna
 
 export type EmployeeGroupByOutputType = {
   id: string
-  name: string
+  employeeId: string
+  staffCategory: string
+  title: string
+  lastName: string
+  firstName: string
+  middleName: string | null
+  gender: string
+  dateOfBirth: Date | null
+  phone: string | null
   email: string
-  position: string
+  address: string | null
+  faculty: string | null
+  school: string | null
+  department: string | null
+  designation: string
+  employmentType: string
+  dateOfEmployment: Date | null
+  qualification: string | null
+  specialization: string | null
+  nextOfKinName: string | null
+  nextOfKinPhone: string | null
+  nextOfKinRelation: string | null
+  status: string
   createdAt: Date
   updatedAt: Date
   _count: EmployeeCountAggregateOutputType | null
@@ -185,9 +325,29 @@ export type EmployeeWhereInput = {
   OR?: Prisma.EmployeeWhereInput[]
   NOT?: Prisma.EmployeeWhereInput | Prisma.EmployeeWhereInput[]
   id?: Prisma.StringFilter<"Employee"> | string
-  name?: Prisma.StringFilter<"Employee"> | string
+  employeeId?: Prisma.StringFilter<"Employee"> | string
+  staffCategory?: Prisma.StringFilter<"Employee"> | string
+  title?: Prisma.StringFilter<"Employee"> | string
+  lastName?: Prisma.StringFilter<"Employee"> | string
+  firstName?: Prisma.StringFilter<"Employee"> | string
+  middleName?: Prisma.StringNullableFilter<"Employee"> | string | null
+  gender?: Prisma.StringFilter<"Employee"> | string
+  dateOfBirth?: Prisma.DateTimeNullableFilter<"Employee"> | Date | string | null
+  phone?: Prisma.StringNullableFilter<"Employee"> | string | null
   email?: Prisma.StringFilter<"Employee"> | string
-  position?: Prisma.StringFilter<"Employee"> | string
+  address?: Prisma.StringNullableFilter<"Employee"> | string | null
+  faculty?: Prisma.StringNullableFilter<"Employee"> | string | null
+  school?: Prisma.StringNullableFilter<"Employee"> | string | null
+  department?: Prisma.StringNullableFilter<"Employee"> | string | null
+  designation?: Prisma.StringFilter<"Employee"> | string
+  employmentType?: Prisma.StringFilter<"Employee"> | string
+  dateOfEmployment?: Prisma.DateTimeNullableFilter<"Employee"> | Date | string | null
+  qualification?: Prisma.StringNullableFilter<"Employee"> | string | null
+  specialization?: Prisma.StringNullableFilter<"Employee"> | string | null
+  nextOfKinName?: Prisma.StringNullableFilter<"Employee"> | string | null
+  nextOfKinPhone?: Prisma.StringNullableFilter<"Employee"> | string | null
+  nextOfKinRelation?: Prisma.StringNullableFilter<"Employee"> | string | null
+  status?: Prisma.StringFilter<"Employee"> | string
   createdAt?: Prisma.DateTimeFilter<"Employee"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Employee"> | Date | string
   attendances?: Prisma.AttendanceListRelationFilter
@@ -195,9 +355,29 @@ export type EmployeeWhereInput = {
 
 export type EmployeeOrderByWithRelationInput = {
   id?: Prisma.SortOrder
-  name?: Prisma.SortOrder
+  employeeId?: Prisma.SortOrder
+  staffCategory?: Prisma.SortOrder
+  title?: Prisma.SortOrder
+  lastName?: Prisma.SortOrder
+  firstName?: Prisma.SortOrder
+  middleName?: Prisma.SortOrderInput | Prisma.SortOrder
+  gender?: Prisma.SortOrder
+  dateOfBirth?: Prisma.SortOrderInput | Prisma.SortOrder
+  phone?: Prisma.SortOrderInput | Prisma.SortOrder
   email?: Prisma.SortOrder
-  position?: Prisma.SortOrder
+  address?: Prisma.SortOrderInput | Prisma.SortOrder
+  faculty?: Prisma.SortOrderInput | Prisma.SortOrder
+  school?: Prisma.SortOrderInput | Prisma.SortOrder
+  department?: Prisma.SortOrderInput | Prisma.SortOrder
+  designation?: Prisma.SortOrder
+  employmentType?: Prisma.SortOrder
+  dateOfEmployment?: Prisma.SortOrderInput | Prisma.SortOrder
+  qualification?: Prisma.SortOrderInput | Prisma.SortOrder
+  specialization?: Prisma.SortOrderInput | Prisma.SortOrder
+  nextOfKinName?: Prisma.SortOrderInput | Prisma.SortOrder
+  nextOfKinPhone?: Prisma.SortOrderInput | Prisma.SortOrder
+  nextOfKinRelation?: Prisma.SortOrderInput | Prisma.SortOrder
+  status?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   attendances?: Prisma.AttendanceOrderByRelationAggregateInput
@@ -205,22 +385,62 @@ export type EmployeeOrderByWithRelationInput = {
 
 export type EmployeeWhereUniqueInput = Prisma.AtLeast<{
   id?: string
+  employeeId?: string
   email?: string
   AND?: Prisma.EmployeeWhereInput | Prisma.EmployeeWhereInput[]
   OR?: Prisma.EmployeeWhereInput[]
   NOT?: Prisma.EmployeeWhereInput | Prisma.EmployeeWhereInput[]
-  name?: Prisma.StringFilter<"Employee"> | string
-  position?: Prisma.StringFilter<"Employee"> | string
+  staffCategory?: Prisma.StringFilter<"Employee"> | string
+  title?: Prisma.StringFilter<"Employee"> | string
+  lastName?: Prisma.StringFilter<"Employee"> | string
+  firstName?: Prisma.StringFilter<"Employee"> | string
+  middleName?: Prisma.StringNullableFilter<"Employee"> | string | null
+  gender?: Prisma.StringFilter<"Employee"> | string
+  dateOfBirth?: Prisma.DateTimeNullableFilter<"Employee"> | Date | string | null
+  phone?: Prisma.StringNullableFilter<"Employee"> | string | null
+  address?: Prisma.StringNullableFilter<"Employee"> | string | null
+  faculty?: Prisma.StringNullableFilter<"Employee"> | string | null
+  school?: Prisma.StringNullableFilter<"Employee"> | string | null
+  department?: Prisma.StringNullableFilter<"Employee"> | string | null
+  designation?: Prisma.StringFilter<"Employee"> | string
+  employmentType?: Prisma.StringFilter<"Employee"> | string
+  dateOfEmployment?: Prisma.DateTimeNullableFilter<"Employee"> | Date | string | null
+  qualification?: Prisma.StringNullableFilter<"Employee"> | string | null
+  specialization?: Prisma.StringNullableFilter<"Employee"> | string | null
+  nextOfKinName?: Prisma.StringNullableFilter<"Employee"> | string | null
+  nextOfKinPhone?: Prisma.StringNullableFilter<"Employee"> | string | null
+  nextOfKinRelation?: Prisma.StringNullableFilter<"Employee"> | string | null
+  status?: Prisma.StringFilter<"Employee"> | string
   createdAt?: Prisma.DateTimeFilter<"Employee"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Employee"> | Date | string
   attendances?: Prisma.AttendanceListRelationFilter
-}, "id" | "email">
+}, "id" | "employeeId" | "email">
 
 export type EmployeeOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
-  name?: Prisma.SortOrder
+  employeeId?: Prisma.SortOrder
+  staffCategory?: Prisma.SortOrder
+  title?: Prisma.SortOrder
+  lastName?: Prisma.SortOrder
+  firstName?: Prisma.SortOrder
+  middleName?: Prisma.SortOrderInput | Prisma.SortOrder
+  gender?: Prisma.SortOrder
+  dateOfBirth?: Prisma.SortOrderInput | Prisma.SortOrder
+  phone?: Prisma.SortOrderInput | Prisma.SortOrder
   email?: Prisma.SortOrder
-  position?: Prisma.SortOrder
+  address?: Prisma.SortOrderInput | Prisma.SortOrder
+  faculty?: Prisma.SortOrderInput | Prisma.SortOrder
+  school?: Prisma.SortOrderInput | Prisma.SortOrder
+  department?: Prisma.SortOrderInput | Prisma.SortOrder
+  designation?: Prisma.SortOrder
+  employmentType?: Prisma.SortOrder
+  dateOfEmployment?: Prisma.SortOrderInput | Prisma.SortOrder
+  qualification?: Prisma.SortOrderInput | Prisma.SortOrder
+  specialization?: Prisma.SortOrderInput | Prisma.SortOrder
+  nextOfKinName?: Prisma.SortOrderInput | Prisma.SortOrder
+  nextOfKinPhone?: Prisma.SortOrderInput | Prisma.SortOrder
+  nextOfKinRelation?: Prisma.SortOrderInput | Prisma.SortOrder
+  status?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.EmployeeCountOrderByAggregateInput
@@ -233,18 +453,58 @@ export type EmployeeScalarWhereWithAggregatesInput = {
   OR?: Prisma.EmployeeScalarWhereWithAggregatesInput[]
   NOT?: Prisma.EmployeeScalarWhereWithAggregatesInput | Prisma.EmployeeScalarWhereWithAggregatesInput[]
   id?: Prisma.StringWithAggregatesFilter<"Employee"> | string
-  name?: Prisma.StringWithAggregatesFilter<"Employee"> | string
+  employeeId?: Prisma.StringWithAggregatesFilter<"Employee"> | string
+  staffCategory?: Prisma.StringWithAggregatesFilter<"Employee"> | string
+  title?: Prisma.StringWithAggregatesFilter<"Employee"> | string
+  lastName?: Prisma.StringWithAggregatesFilter<"Employee"> | string
+  firstName?: Prisma.StringWithAggregatesFilter<"Employee"> | string
+  middleName?: Prisma.StringNullableWithAggregatesFilter<"Employee"> | string | null
+  gender?: Prisma.StringWithAggregatesFilter<"Employee"> | string
+  dateOfBirth?: Prisma.DateTimeNullableWithAggregatesFilter<"Employee"> | Date | string | null
+  phone?: Prisma.StringNullableWithAggregatesFilter<"Employee"> | string | null
   email?: Prisma.StringWithAggregatesFilter<"Employee"> | string
-  position?: Prisma.StringWithAggregatesFilter<"Employee"> | string
+  address?: Prisma.StringNullableWithAggregatesFilter<"Employee"> | string | null
+  faculty?: Prisma.StringNullableWithAggregatesFilter<"Employee"> | string | null
+  school?: Prisma.StringNullableWithAggregatesFilter<"Employee"> | string | null
+  department?: Prisma.StringNullableWithAggregatesFilter<"Employee"> | string | null
+  designation?: Prisma.StringWithAggregatesFilter<"Employee"> | string
+  employmentType?: Prisma.StringWithAggregatesFilter<"Employee"> | string
+  dateOfEmployment?: Prisma.DateTimeNullableWithAggregatesFilter<"Employee"> | Date | string | null
+  qualification?: Prisma.StringNullableWithAggregatesFilter<"Employee"> | string | null
+  specialization?: Prisma.StringNullableWithAggregatesFilter<"Employee"> | string | null
+  nextOfKinName?: Prisma.StringNullableWithAggregatesFilter<"Employee"> | string | null
+  nextOfKinPhone?: Prisma.StringNullableWithAggregatesFilter<"Employee"> | string | null
+  nextOfKinRelation?: Prisma.StringNullableWithAggregatesFilter<"Employee"> | string | null
+  status?: Prisma.StringWithAggregatesFilter<"Employee"> | string
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Employee"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Employee"> | Date | string
 }
 
 export type EmployeeCreateInput = {
   id?: string
-  name: string
+  employeeId: string
+  staffCategory: string
+  title: string
+  lastName: string
+  firstName: string
+  middleName?: string | null
+  gender: string
+  dateOfBirth?: Date | string | null
+  phone?: string | null
   email: string
-  position: string
+  address?: string | null
+  faculty?: string | null
+  school?: string | null
+  department?: string | null
+  designation: string
+  employmentType: string
+  dateOfEmployment?: Date | string | null
+  qualification?: string | null
+  specialization?: string | null
+  nextOfKinName?: string | null
+  nextOfKinPhone?: string | null
+  nextOfKinRelation?: string | null
+  status?: string
   createdAt?: Date | string
   updatedAt?: Date | string
   attendances?: Prisma.AttendanceCreateNestedManyWithoutEmployeeInput
@@ -252,9 +512,29 @@ export type EmployeeCreateInput = {
 
 export type EmployeeUncheckedCreateInput = {
   id?: string
-  name: string
+  employeeId: string
+  staffCategory: string
+  title: string
+  lastName: string
+  firstName: string
+  middleName?: string | null
+  gender: string
+  dateOfBirth?: Date | string | null
+  phone?: string | null
   email: string
-  position: string
+  address?: string | null
+  faculty?: string | null
+  school?: string | null
+  department?: string | null
+  designation: string
+  employmentType: string
+  dateOfEmployment?: Date | string | null
+  qualification?: string | null
+  specialization?: string | null
+  nextOfKinName?: string | null
+  nextOfKinPhone?: string | null
+  nextOfKinRelation?: string | null
+  status?: string
   createdAt?: Date | string
   updatedAt?: Date | string
   attendances?: Prisma.AttendanceUncheckedCreateNestedManyWithoutEmployeeInput
@@ -262,9 +542,29 @@ export type EmployeeUncheckedCreateInput = {
 
 export type EmployeeUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
+  employeeId?: Prisma.StringFieldUpdateOperationsInput | string
+  staffCategory?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  lastName?: Prisma.StringFieldUpdateOperationsInput | string
+  firstName?: Prisma.StringFieldUpdateOperationsInput | string
+  middleName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  gender?: Prisma.StringFieldUpdateOperationsInput | string
+  dateOfBirth?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   email?: Prisma.StringFieldUpdateOperationsInput | string
-  position?: Prisma.StringFieldUpdateOperationsInput | string
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  faculty?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  school?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  department?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  designation?: Prisma.StringFieldUpdateOperationsInput | string
+  employmentType?: Prisma.StringFieldUpdateOperationsInput | string
+  dateOfEmployment?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  qualification?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  specialization?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  nextOfKinName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  nextOfKinPhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  nextOfKinRelation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   attendances?: Prisma.AttendanceUpdateManyWithoutEmployeeNestedInput
@@ -272,9 +572,29 @@ export type EmployeeUpdateInput = {
 
 export type EmployeeUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
+  employeeId?: Prisma.StringFieldUpdateOperationsInput | string
+  staffCategory?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  lastName?: Prisma.StringFieldUpdateOperationsInput | string
+  firstName?: Prisma.StringFieldUpdateOperationsInput | string
+  middleName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  gender?: Prisma.StringFieldUpdateOperationsInput | string
+  dateOfBirth?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   email?: Prisma.StringFieldUpdateOperationsInput | string
-  position?: Prisma.StringFieldUpdateOperationsInput | string
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  faculty?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  school?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  department?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  designation?: Prisma.StringFieldUpdateOperationsInput | string
+  employmentType?: Prisma.StringFieldUpdateOperationsInput | string
+  dateOfEmployment?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  qualification?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  specialization?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  nextOfKinName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  nextOfKinPhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  nextOfKinRelation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   attendances?: Prisma.AttendanceUncheckedUpdateManyWithoutEmployeeNestedInput
@@ -282,54 +602,174 @@ export type EmployeeUncheckedUpdateInput = {
 
 export type EmployeeCreateManyInput = {
   id?: string
-  name: string
+  employeeId: string
+  staffCategory: string
+  title: string
+  lastName: string
+  firstName: string
+  middleName?: string | null
+  gender: string
+  dateOfBirth?: Date | string | null
+  phone?: string | null
   email: string
-  position: string
+  address?: string | null
+  faculty?: string | null
+  school?: string | null
+  department?: string | null
+  designation: string
+  employmentType: string
+  dateOfEmployment?: Date | string | null
+  qualification?: string | null
+  specialization?: string | null
+  nextOfKinName?: string | null
+  nextOfKinPhone?: string | null
+  nextOfKinRelation?: string | null
+  status?: string
   createdAt?: Date | string
   updatedAt?: Date | string
 }
 
 export type EmployeeUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
+  employeeId?: Prisma.StringFieldUpdateOperationsInput | string
+  staffCategory?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  lastName?: Prisma.StringFieldUpdateOperationsInput | string
+  firstName?: Prisma.StringFieldUpdateOperationsInput | string
+  middleName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  gender?: Prisma.StringFieldUpdateOperationsInput | string
+  dateOfBirth?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   email?: Prisma.StringFieldUpdateOperationsInput | string
-  position?: Prisma.StringFieldUpdateOperationsInput | string
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  faculty?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  school?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  department?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  designation?: Prisma.StringFieldUpdateOperationsInput | string
+  employmentType?: Prisma.StringFieldUpdateOperationsInput | string
+  dateOfEmployment?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  qualification?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  specialization?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  nextOfKinName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  nextOfKinPhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  nextOfKinRelation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type EmployeeUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
+  employeeId?: Prisma.StringFieldUpdateOperationsInput | string
+  staffCategory?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  lastName?: Prisma.StringFieldUpdateOperationsInput | string
+  firstName?: Prisma.StringFieldUpdateOperationsInput | string
+  middleName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  gender?: Prisma.StringFieldUpdateOperationsInput | string
+  dateOfBirth?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   email?: Prisma.StringFieldUpdateOperationsInput | string
-  position?: Prisma.StringFieldUpdateOperationsInput | string
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  faculty?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  school?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  department?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  designation?: Prisma.StringFieldUpdateOperationsInput | string
+  employmentType?: Prisma.StringFieldUpdateOperationsInput | string
+  dateOfEmployment?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  qualification?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  specialization?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  nextOfKinName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  nextOfKinPhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  nextOfKinRelation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type EmployeeCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
-  name?: Prisma.SortOrder
+  employeeId?: Prisma.SortOrder
+  staffCategory?: Prisma.SortOrder
+  title?: Prisma.SortOrder
+  lastName?: Prisma.SortOrder
+  firstName?: Prisma.SortOrder
+  middleName?: Prisma.SortOrder
+  gender?: Prisma.SortOrder
+  dateOfBirth?: Prisma.SortOrder
+  phone?: Prisma.SortOrder
   email?: Prisma.SortOrder
-  position?: Prisma.SortOrder
+  address?: Prisma.SortOrder
+  faculty?: Prisma.SortOrder
+  school?: Prisma.SortOrder
+  department?: Prisma.SortOrder
+  designation?: Prisma.SortOrder
+  employmentType?: Prisma.SortOrder
+  dateOfEmployment?: Prisma.SortOrder
+  qualification?: Prisma.SortOrder
+  specialization?: Prisma.SortOrder
+  nextOfKinName?: Prisma.SortOrder
+  nextOfKinPhone?: Prisma.SortOrder
+  nextOfKinRelation?: Prisma.SortOrder
+  status?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
 
 export type EmployeeMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
-  name?: Prisma.SortOrder
+  employeeId?: Prisma.SortOrder
+  staffCategory?: Prisma.SortOrder
+  title?: Prisma.SortOrder
+  lastName?: Prisma.SortOrder
+  firstName?: Prisma.SortOrder
+  middleName?: Prisma.SortOrder
+  gender?: Prisma.SortOrder
+  dateOfBirth?: Prisma.SortOrder
+  phone?: Prisma.SortOrder
   email?: Prisma.SortOrder
-  position?: Prisma.SortOrder
+  address?: Prisma.SortOrder
+  faculty?: Prisma.SortOrder
+  school?: Prisma.SortOrder
+  department?: Prisma.SortOrder
+  designation?: Prisma.SortOrder
+  employmentType?: Prisma.SortOrder
+  dateOfEmployment?: Prisma.SortOrder
+  qualification?: Prisma.SortOrder
+  specialization?: Prisma.SortOrder
+  nextOfKinName?: Prisma.SortOrder
+  nextOfKinPhone?: Prisma.SortOrder
+  nextOfKinRelation?: Prisma.SortOrder
+  status?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
 
 export type EmployeeMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
-  name?: Prisma.SortOrder
+  employeeId?: Prisma.SortOrder
+  staffCategory?: Prisma.SortOrder
+  title?: Prisma.SortOrder
+  lastName?: Prisma.SortOrder
+  firstName?: Prisma.SortOrder
+  middleName?: Prisma.SortOrder
+  gender?: Prisma.SortOrder
+  dateOfBirth?: Prisma.SortOrder
+  phone?: Prisma.SortOrder
   email?: Prisma.SortOrder
-  position?: Prisma.SortOrder
+  address?: Prisma.SortOrder
+  faculty?: Prisma.SortOrder
+  school?: Prisma.SortOrder
+  department?: Prisma.SortOrder
+  designation?: Prisma.SortOrder
+  employmentType?: Prisma.SortOrder
+  dateOfEmployment?: Prisma.SortOrder
+  qualification?: Prisma.SortOrder
+  specialization?: Prisma.SortOrder
+  nextOfKinName?: Prisma.SortOrder
+  nextOfKinPhone?: Prisma.SortOrder
+  nextOfKinRelation?: Prisma.SortOrder
+  status?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -337,6 +777,14 @@ export type EmployeeMinOrderByAggregateInput = {
 export type EmployeeScalarRelationFilter = {
   is?: Prisma.EmployeeWhereInput
   isNot?: Prisma.EmployeeWhereInput
+}
+
+export type NullableStringFieldUpdateOperationsInput = {
+  set?: string | null
+}
+
+export type NullableDateTimeFieldUpdateOperationsInput = {
+  set?: Date | string | null
 }
 
 export type EmployeeCreateNestedOneWithoutAttendancesInput = {
@@ -355,18 +803,58 @@ export type EmployeeUpdateOneRequiredWithoutAttendancesNestedInput = {
 
 export type EmployeeCreateWithoutAttendancesInput = {
   id?: string
-  name: string
+  employeeId: string
+  staffCategory: string
+  title: string
+  lastName: string
+  firstName: string
+  middleName?: string | null
+  gender: string
+  dateOfBirth?: Date | string | null
+  phone?: string | null
   email: string
-  position: string
+  address?: string | null
+  faculty?: string | null
+  school?: string | null
+  department?: string | null
+  designation: string
+  employmentType: string
+  dateOfEmployment?: Date | string | null
+  qualification?: string | null
+  specialization?: string | null
+  nextOfKinName?: string | null
+  nextOfKinPhone?: string | null
+  nextOfKinRelation?: string | null
+  status?: string
   createdAt?: Date | string
   updatedAt?: Date | string
 }
 
 export type EmployeeUncheckedCreateWithoutAttendancesInput = {
   id?: string
-  name: string
+  employeeId: string
+  staffCategory: string
+  title: string
+  lastName: string
+  firstName: string
+  middleName?: string | null
+  gender: string
+  dateOfBirth?: Date | string | null
+  phone?: string | null
   email: string
-  position: string
+  address?: string | null
+  faculty?: string | null
+  school?: string | null
+  department?: string | null
+  designation: string
+  employmentType: string
+  dateOfEmployment?: Date | string | null
+  qualification?: string | null
+  specialization?: string | null
+  nextOfKinName?: string | null
+  nextOfKinPhone?: string | null
+  nextOfKinRelation?: string | null
+  status?: string
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -389,18 +877,58 @@ export type EmployeeUpdateToOneWithWhereWithoutAttendancesInput = {
 
 export type EmployeeUpdateWithoutAttendancesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
+  employeeId?: Prisma.StringFieldUpdateOperationsInput | string
+  staffCategory?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  lastName?: Prisma.StringFieldUpdateOperationsInput | string
+  firstName?: Prisma.StringFieldUpdateOperationsInput | string
+  middleName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  gender?: Prisma.StringFieldUpdateOperationsInput | string
+  dateOfBirth?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   email?: Prisma.StringFieldUpdateOperationsInput | string
-  position?: Prisma.StringFieldUpdateOperationsInput | string
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  faculty?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  school?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  department?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  designation?: Prisma.StringFieldUpdateOperationsInput | string
+  employmentType?: Prisma.StringFieldUpdateOperationsInput | string
+  dateOfEmployment?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  qualification?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  specialization?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  nextOfKinName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  nextOfKinPhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  nextOfKinRelation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type EmployeeUncheckedUpdateWithoutAttendancesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
+  employeeId?: Prisma.StringFieldUpdateOperationsInput | string
+  staffCategory?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  lastName?: Prisma.StringFieldUpdateOperationsInput | string
+  firstName?: Prisma.StringFieldUpdateOperationsInput | string
+  middleName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  gender?: Prisma.StringFieldUpdateOperationsInput | string
+  dateOfBirth?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   email?: Prisma.StringFieldUpdateOperationsInput | string
-  position?: Prisma.StringFieldUpdateOperationsInput | string
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  faculty?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  school?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  department?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  designation?: Prisma.StringFieldUpdateOperationsInput | string
+  employmentType?: Prisma.StringFieldUpdateOperationsInput | string
+  dateOfEmployment?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  qualification?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  specialization?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  nextOfKinName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  nextOfKinPhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  nextOfKinRelation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -438,9 +966,29 @@ export type EmployeeCountOutputTypeCountAttendancesArgs<ExtArgs extends runtime.
 
 export type EmployeeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
-  name?: boolean
+  employeeId?: boolean
+  staffCategory?: boolean
+  title?: boolean
+  lastName?: boolean
+  firstName?: boolean
+  middleName?: boolean
+  gender?: boolean
+  dateOfBirth?: boolean
+  phone?: boolean
   email?: boolean
-  position?: boolean
+  address?: boolean
+  faculty?: boolean
+  school?: boolean
+  department?: boolean
+  designation?: boolean
+  employmentType?: boolean
+  dateOfEmployment?: boolean
+  qualification?: boolean
+  specialization?: boolean
+  nextOfKinName?: boolean
+  nextOfKinPhone?: boolean
+  nextOfKinRelation?: boolean
+  status?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   attendances?: boolean | Prisma.Employee$attendancesArgs<ExtArgs>
@@ -449,32 +997,92 @@ export type EmployeeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs
 
 export type EmployeeSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
-  name?: boolean
+  employeeId?: boolean
+  staffCategory?: boolean
+  title?: boolean
+  lastName?: boolean
+  firstName?: boolean
+  middleName?: boolean
+  gender?: boolean
+  dateOfBirth?: boolean
+  phone?: boolean
   email?: boolean
-  position?: boolean
+  address?: boolean
+  faculty?: boolean
+  school?: boolean
+  department?: boolean
+  designation?: boolean
+  employmentType?: boolean
+  dateOfEmployment?: boolean
+  qualification?: boolean
+  specialization?: boolean
+  nextOfKinName?: boolean
+  nextOfKinPhone?: boolean
+  nextOfKinRelation?: boolean
+  status?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }, ExtArgs["result"]["employee"]>
 
 export type EmployeeSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
-  name?: boolean
+  employeeId?: boolean
+  staffCategory?: boolean
+  title?: boolean
+  lastName?: boolean
+  firstName?: boolean
+  middleName?: boolean
+  gender?: boolean
+  dateOfBirth?: boolean
+  phone?: boolean
   email?: boolean
-  position?: boolean
+  address?: boolean
+  faculty?: boolean
+  school?: boolean
+  department?: boolean
+  designation?: boolean
+  employmentType?: boolean
+  dateOfEmployment?: boolean
+  qualification?: boolean
+  specialization?: boolean
+  nextOfKinName?: boolean
+  nextOfKinPhone?: boolean
+  nextOfKinRelation?: boolean
+  status?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }, ExtArgs["result"]["employee"]>
 
 export type EmployeeSelectScalar = {
   id?: boolean
-  name?: boolean
+  employeeId?: boolean
+  staffCategory?: boolean
+  title?: boolean
+  lastName?: boolean
+  firstName?: boolean
+  middleName?: boolean
+  gender?: boolean
+  dateOfBirth?: boolean
+  phone?: boolean
   email?: boolean
-  position?: boolean
+  address?: boolean
+  faculty?: boolean
+  school?: boolean
+  department?: boolean
+  designation?: boolean
+  employmentType?: boolean
+  dateOfEmployment?: boolean
+  qualification?: boolean
+  specialization?: boolean
+  nextOfKinName?: boolean
+  nextOfKinPhone?: boolean
+  nextOfKinRelation?: boolean
+  status?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type EmployeeOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "email" | "position" | "createdAt" | "updatedAt", ExtArgs["result"]["employee"]>
+export type EmployeeOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "employeeId" | "staffCategory" | "title" | "lastName" | "firstName" | "middleName" | "gender" | "dateOfBirth" | "phone" | "email" | "address" | "faculty" | "school" | "department" | "designation" | "employmentType" | "dateOfEmployment" | "qualification" | "specialization" | "nextOfKinName" | "nextOfKinPhone" | "nextOfKinRelation" | "status" | "createdAt" | "updatedAt", ExtArgs["result"]["employee"]>
 export type EmployeeInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   attendances?: boolean | Prisma.Employee$attendancesArgs<ExtArgs>
   _count?: boolean | Prisma.EmployeeCountOutputTypeDefaultArgs<ExtArgs>
@@ -489,9 +1097,29 @@ export type $EmployeePayload<ExtArgs extends runtime.Types.Extensions.InternalAr
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
-    name: string
+    employeeId: string
+    staffCategory: string
+    title: string
+    lastName: string
+    firstName: string
+    middleName: string | null
+    gender: string
+    dateOfBirth: Date | null
+    phone: string | null
     email: string
-    position: string
+    address: string | null
+    faculty: string | null
+    school: string | null
+    department: string | null
+    designation: string
+    employmentType: string
+    dateOfEmployment: Date | null
+    qualification: string | null
+    specialization: string | null
+    nextOfKinName: string | null
+    nextOfKinPhone: string | null
+    nextOfKinRelation: string | null
+    status: string
     createdAt: Date
     updatedAt: Date
   }, ExtArgs["result"]["employee"]>
@@ -919,9 +1547,29 @@ export interface Prisma__EmployeeClient<T, Null = never, ExtArgs extends runtime
  */
 export interface EmployeeFieldRefs {
   readonly id: Prisma.FieldRef<"Employee", 'String'>
-  readonly name: Prisma.FieldRef<"Employee", 'String'>
+  readonly employeeId: Prisma.FieldRef<"Employee", 'String'>
+  readonly staffCategory: Prisma.FieldRef<"Employee", 'String'>
+  readonly title: Prisma.FieldRef<"Employee", 'String'>
+  readonly lastName: Prisma.FieldRef<"Employee", 'String'>
+  readonly firstName: Prisma.FieldRef<"Employee", 'String'>
+  readonly middleName: Prisma.FieldRef<"Employee", 'String'>
+  readonly gender: Prisma.FieldRef<"Employee", 'String'>
+  readonly dateOfBirth: Prisma.FieldRef<"Employee", 'DateTime'>
+  readonly phone: Prisma.FieldRef<"Employee", 'String'>
   readonly email: Prisma.FieldRef<"Employee", 'String'>
-  readonly position: Prisma.FieldRef<"Employee", 'String'>
+  readonly address: Prisma.FieldRef<"Employee", 'String'>
+  readonly faculty: Prisma.FieldRef<"Employee", 'String'>
+  readonly school: Prisma.FieldRef<"Employee", 'String'>
+  readonly department: Prisma.FieldRef<"Employee", 'String'>
+  readonly designation: Prisma.FieldRef<"Employee", 'String'>
+  readonly employmentType: Prisma.FieldRef<"Employee", 'String'>
+  readonly dateOfEmployment: Prisma.FieldRef<"Employee", 'DateTime'>
+  readonly qualification: Prisma.FieldRef<"Employee", 'String'>
+  readonly specialization: Prisma.FieldRef<"Employee", 'String'>
+  readonly nextOfKinName: Prisma.FieldRef<"Employee", 'String'>
+  readonly nextOfKinPhone: Prisma.FieldRef<"Employee", 'String'>
+  readonly nextOfKinRelation: Prisma.FieldRef<"Employee", 'String'>
+  readonly status: Prisma.FieldRef<"Employee", 'String'>
   readonly createdAt: Prisma.FieldRef<"Employee", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Employee", 'DateTime'>
 }

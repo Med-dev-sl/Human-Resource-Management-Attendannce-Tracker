@@ -87,9 +87,29 @@ export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof User
 
 export const EmployeeScalarFieldEnum = {
   id: 'id',
-  name: 'name',
+  employeeId: 'employeeId',
+  staffCategory: 'staffCategory',
+  title: 'title',
+  lastName: 'lastName',
+  firstName: 'firstName',
+  middleName: 'middleName',
+  gender: 'gender',
+  dateOfBirth: 'dateOfBirth',
+  phone: 'phone',
   email: 'email',
-  position: 'position',
+  address: 'address',
+  faculty: 'faculty',
+  school: 'school',
+  department: 'department',
+  designation: 'designation',
+  employmentType: 'employmentType',
+  dateOfEmployment: 'dateOfEmployment',
+  qualification: 'qualification',
+  specialization: 'specialization',
+  nextOfKinName: 'nextOfKinName',
+  nextOfKinPhone: 'nextOfKinPhone',
+  nextOfKinRelation: 'nextOfKinRelation',
+  status: 'status',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -101,6 +121,8 @@ export const AttendanceScalarFieldEnum = {
   id: 'id',
   employeeId: 'employeeId',
   date: 'date',
+  checkIn: 'checkIn',
+  checkOut: 'checkOut',
   status: 'status',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
@@ -123,4 +145,12 @@ export const QueryMode = {
 } as const
 
 export type QueryMode = (typeof QueryMode)[keyof typeof QueryMode]
+
+
+export const NullsOrder = {
+  first: 'first',
+  last: 'last'
+} as const
+
+export type NullsOrder = (typeof NullsOrder)[keyof typeof NullsOrder]
 

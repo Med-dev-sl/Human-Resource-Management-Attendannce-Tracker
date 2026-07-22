@@ -18,21 +18,50 @@ model User {
 }
 
 model Employee {
-  id        String   @id @default(cuid())
-  name      String
-  email     String   @unique
-  position  String
+  id            String   @id @default(cuid())
+  employeeId    String   @unique
+  staffCategory String
+  title         String
+  lastName      String
+  firstName     String
+  middleName    String?
+  gender        String
+  dateOfBirth   DateTime?
+  phone         String?
+  email         String   @unique
+  address       String?
+
+  faculty       String?
+  school        String?
+  department    String?
+
+  designation   String
+  employmentType String
+  dateOfEmployment DateTime?
+
+  qualification String?
+  specialization String?
+
+  nextOfKinName    String?
+  nextOfKinPhone   String?
+  nextOfKinRelation String?
+
+  status    String   @default("active")
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   attendances Attendance[]
 }
 
 model Attendance {
-  id        String   @id @default(cuid())
+  id         String   @id @default(cuid())
   employeeId String
-  employee  Employee @relation(fields: [employeeId], references: [id])
-  date      DateTime @default(now())
-  status    String   @default("present")
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  employee   Employee @relation(fields: [employeeId], references: [id])
+  date       DateTime @default(now())
+  checkIn    DateTime?
+  checkOut   DateTime?
+  status     String   @default("present")
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@unique([employeeId, date])
 }
