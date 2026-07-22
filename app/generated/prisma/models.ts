@@ -10,5 +10,6 @@
  */
 export type * from './models/User'
 export type * from './models/Employee'
+export type * from './models/WorkSchedule'
 export type * from './models/Attendance'
 export type * from './commonInputTypes'

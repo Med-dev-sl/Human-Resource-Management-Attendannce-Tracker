@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
+import { getWorkSchedule, getStatusForCheckIn } from "@/lib/schedule";
 
 export async function POST(request: Request) {
   try {
@@ -28,13 +29,9 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Already checked in today" }, { status: 409 });
     }
 
+    const schedule = await getWorkSchedule();
     const now = new Date();
-    const hour = now.getHours();
-    const minute = now.getMinutes();
-    const timeInMinutes = hour * 60 + minute;
-
-    const lateThreshold = 8 * 60 + 30;
-    const status = timeInMinutes > lateThreshold ? "late" : "present";
+    const status = getStatusForCheckIn(now, schedule);
 
     const attendance = await prisma.attendance.create({
       data: {

@@ -52,6 +52,11 @@ export type User = Prisma.UserModel
  */
 export type Employee = Prisma.EmployeeModel
 /**
+ * Model WorkSchedule
+ * 
+ */
+export type WorkSchedule = Prisma.WorkScheduleModel
+/**
  * Model Attendance
  * 
  */

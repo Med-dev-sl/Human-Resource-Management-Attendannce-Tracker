@@ -52,6 +52,17 @@ model Employee {
   attendances Attendance[]
 }
 
+model WorkSchedule {
+  id                  String @id @default(cuid())
+  startTime           String @default("08:00")
+  endTime             String @default("17:00")
+  lateMinutes         Int    @default(30)
+  absentMinutes       Int    @default(120)
+  workDays            String @default("MON-FRI")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
 model Attendance {
   id         String   @id @default(cuid())
   employeeId String
