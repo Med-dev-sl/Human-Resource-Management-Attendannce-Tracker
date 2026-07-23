@@ -26,6 +26,7 @@ export default function QRCheckinPage() {
   const [loading, setLoading] = useState(true);
   const [mounted, setMounted] = useState(false);
   const [qrData, setQrData] = useState<QRData | null>(null);
+  const [qrDataUri, setQrDataUri] = useState("");
   const [schedule, setSchedule] = useState<Schedule | null>(null);
   const [withinHours, setWithinHours] = useState(false);
   const [now, setNow] = useState(new Date());
@@ -38,6 +39,11 @@ export default function QRCheckinPage() {
       const res = await fetch("/api/attendance/qr-token");
       const data = await res.json();
       setQrData(data);
+      if (data.qrSvg) {
+        setQrDataUri(`data:image/svg+xml,${encodeURIComponent(data.qrSvg)}`);
+      } else {
+        setQrDataUri("");
+      }
     } catch {}
   }
 
@@ -130,9 +136,9 @@ export default function QRCheckinPage() {
 
                 <div className="relative bg-white rounded-2xl p-4 shadow-inner border border-gray-100 mb-4 min-h-[18rem] flex items-center justify-center w-full">
                   {showQR ? (
-                    <div
-                      key={qrData.token}
-                      dangerouslySetInnerHTML={{ __html: qrData.qrSvg ?? "" }}
+                    <img
+                      src={qrDataUri}
+                      alt="QR Code"
                       className="w-64 h-64 animate-[fadeIn_0.8s_ease-out]"
                     />
                   ) : (

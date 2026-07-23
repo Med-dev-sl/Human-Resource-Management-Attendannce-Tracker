@@ -26,7 +26,7 @@ function CheckinContent() {
   const [message, setMessage] = useState("");
   const [withinHours, setWithinHours] = useState(true);
   const [schedule, setSchedule] = useState<{ startTime: string; endTime: string } | null>(null);
-  const [qrSvg, setQrSvg] = useState("");
+  const [qrDataUri, setQrDataUri] = useState("");
   const [result, setResult] = useState<{
     message: string; action: string; employee: { name: string; employeeId: string };
     attendance: { checkIn?: string; checkOut?: string; status?: string };
@@ -57,8 +57,12 @@ function CheckinContent() {
       fetch("/api/attendance/qr-token")
         .then((r) => r.json())
         .then((data) => {
-          if (data.qrSvg && data.valid) setQrSvg(data.qrSvg);
-          else if (!data.valid) setQrSvg("");
+          if (data.qrSvg && data.valid) {
+            const uri = `data:image/svg+xml,${encodeURIComponent(data.qrSvg)}`;
+            setQrDataUri(uri);
+          } else if (!data.valid) {
+            setQrDataUri("");
+          }
         });
     }
 
@@ -134,10 +138,10 @@ function CheckinContent() {
                 {hrs && <p className="text-[11px] text-gray-400 mt-2">Work hours: {hrs}</p>}
               </div>
 
-              {withinHours && qrSvg && (
+              {withinHours && qrDataUri && (
                 <div className="flex justify-center animate-[fadeIn_0.6s_ease-out]">
-                  <div className="bg-white rounded-xl p-3 shadow-inner border border-gray-100">
-                    <div dangerouslySetInnerHTML={{ __html: qrSvg }} className="w-40 h-40" />
+                  <div className="bg-white rounded-xl p-2 shadow-inner border border-gray-100">
+                    <img src={qrDataUri} alt="QR Code" className="w-48 h-48" />
                   </div>
                 </div>
               )}
