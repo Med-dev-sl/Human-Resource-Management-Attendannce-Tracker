@@ -1,40 +1,42 @@
-import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
+import { success, error, withRateLimit } from "@/lib/api-utils";
+import { getCached, setCache, generateCacheKey } from "@/lib/cache";
 
-export async function GET() {
+export async function GET(request: Request) {
+  const rateLimitResult = withRateLimit(request, 120, 60_000);
+  if (rateLimitResult) return rateLimitResult.response;
+
   try {
-    const startOfDay = new Date();
-    startOfDay.setHours(0, 0, 0, 0);
-    const endOfDay = new Date();
-    endOfDay.setHours(23, 59, 59, 999);
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const tomorrow = new Date(today);
+    tomorrow.setDate(tomorrow.getDate() + 1);
 
-    const attendances = await prisma.employee.findMany({
-      where: { status: "active" },
-      select: {
-        id: true,
-        employeeId: true,
-        firstName: true,
-        lastName: true,
-        title: true,
-        department: true,
-        staffCategory: true,
-        attendances: {
-          where: {
-            date: { gte: startOfDay, lte: endOfDay },
-          },
-          take: 1,
-        },
-      },
-      orderBy: { lastName: "asc" },
-    });
+    const cacheKey = generateCacheKey("attendance:today", today.toISOString().slice(0, 10));
+    const cached = await getCached<unknown>(cacheKey);
+    if (cached) return success(cached, 200, 15);
 
-    const records = attendances.map((emp) => ({
+    const [activeEmployees, todayAttendances] = await Promise.all([
+      prisma.employee.findMany({
+        where: { status: "active" },
+        select: { id: true, employeeId: true, firstName: true, lastName: true, title: true, department: true, staffCategory: true },
+        orderBy: { lastName: "asc" },
+      }),
+      prisma.attendance.findMany({
+        where: { date: { gte: today, lt: tomorrow } },
+        select: { id: true, employeeId: true, checkIn: true, checkOut: true, status: true, date: true },
+      }),
+    ]);
+
+    const attendanceMap = new Map(todayAttendances.map((a) => [a.employeeId, a]));
+
+    const records = activeEmployees.map((emp) => ({
       employeeId: emp.id,
       employeeCode: emp.employeeId,
       name: `${emp.title} ${emp.firstName} ${emp.lastName}`,
       department: emp.department,
       staffCategory: emp.staffCategory,
-      attendance: emp.attendances[0] || null,
+      attendance: attendanceMap.get(emp.id) || null,
     }));
 
     const summary = {
@@ -46,8 +48,10 @@ export async function GET() {
       onLeave: records.filter((r) => r.attendance?.status === "on-leave").length,
     };
 
-    return NextResponse.json({ records, summary });
-  } catch {
-    return NextResponse.json({ error: "Failed to fetch today's attendance" }, { status: 500 });
+    const result = { records, summary };
+    await setCache(cacheKey, result, 15_000);
+    return success(result, 200, 15);
+  } catch (err) {
+    return error("Failed to fetch today's attendance", 500);
   }
 }

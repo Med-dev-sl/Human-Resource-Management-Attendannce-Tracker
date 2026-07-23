@@ -1,39 +1,34 @@
 import { NextResponse } from "next/server";
 import bcrypt from "bcryptjs";
 import { prisma } from "@/lib/prisma";
+import { loginSchema } from "@/lib/validation";
+import { success, error, withRateLimit, unauthorized } from "@/lib/api-utils";
+import { securityHeaders } from "@/lib/security";
 
 export async function POST(request: Request) {
+  const rateLimitResult = withRateLimit(request, 20, 60_000);
+  if (rateLimitResult) return rateLimitResult.response;
+
   try {
-    const { email, password } = await request.json();
-
-    if (!email || !password) {
-      return NextResponse.json(
-        { error: "Email and password are required" },
-        { status: 400 }
-      );
+    const body = await request.json();
+    const parsed = loginSchema.safeParse(body);
+    if (!parsed.success) {
+      return error("Validation failed", 400, parsed.error.flatten().fieldErrors);
     }
 
-    const user = await prisma.user.findUnique({ where: { email } });
+    const user = await prisma.user.findUnique({
+      where: { email: parsed.data.email },
+      select: { id: true, email: true, name: true, role: true, password: true },
+    });
 
-    if (!user) {
-      return NextResponse.json(
-        { error: "Invalid email or password" },
-        { status: 401 }
-      );
-    }
+    if (!user) return unauthorized("Invalid email or password");
 
-    const isValid = await bcrypt.compare(password, user.password);
-
-    if (!isValid) {
-      return NextResponse.json(
-        { error: "Invalid email or password" },
-        { status: 401 }
-      );
-    }
+    const isValid = await bcrypt.compare(parsed.data.password, user.password);
+    if (!isValid) return unauthorized("Invalid email or password");
 
     const response = NextResponse.json({
       user: { id: user.id, email: user.email, name: user.name, role: user.role },
-    });
+    }, { headers: securityHeaders() });
 
     response.cookies.set("session", user.id, {
       httpOnly: true,
@@ -44,10 +39,7 @@ export async function POST(request: Request) {
     });
 
     return response;
-  } catch {
-    return NextResponse.json(
-      { error: "Internal server error" },
-      { status: 500 }
-    );
+  } catch (err) {
+    return error("Internal server error", 500);
   }
 }

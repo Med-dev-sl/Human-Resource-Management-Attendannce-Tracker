@@ -1,59 +1,79 @@
-import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
+import { success, error, withRateLimit } from "@/lib/api-utils";
+import { parsePagination, paginate } from "@/lib/pagination";
+import { employeeSchema } from "@/lib/validation";
+import { getCached, setCache, generateCacheKey } from "@/lib/cache";
 
-export async function GET() {
+export async function GET(request: Request) {
+  const rateLimitResult = withRateLimit(request, 120, 60_000);
+  if (rateLimitResult) return rateLimitResult.response;
+
   try {
-    const employees = await prisma.employee.findMany({
-      orderBy: { createdAt: "desc" },
-      include: { _count: { select: { attendances: true } } },
-    });
-    return NextResponse.json({ employees });
-  } catch {
-    return NextResponse.json({ error: "Failed to fetch employees" }, { status: 500 });
+    const { searchParams } = new URL(request.url);
+    const pag = parsePagination(searchParams);
+    const search = searchParams.get("search") || "";
+    const category = searchParams.get("category") || "";
+    const status = searchParams.get("status") || "";
+
+    const cacheKey = generateCacheKey("employees:list", search, category, status, String(pag.page), String(pag.limit));
+    const cached = await getCached<unknown>(cacheKey);
+    if (cached) return success(cached, 200, 15);
+
+    const where: Record<string, unknown> = {};
+    if (category) where.staffCategory = category;
+    if (status) where.status = status;
+    if (search) {
+      where.OR = [
+        { firstName: { contains: search, mode: "insensitive" } },
+        { lastName: { contains: search, mode: "insensitive" } },
+        { employeeId: { contains: search, mode: "insensitive" } },
+        { email: { contains: search, mode: "insensitive" } },
+      ];
+    }
+
+    const [employees, total] = await Promise.all([
+      prisma.employee.findMany({
+        where,
+        skip: pag.skip,
+        take: pag.limit,
+        orderBy: { createdAt: "desc" },
+        include: { _count: { select: { attendances: true } } },
+      }),
+      prisma.employee.count({ where }),
+    ]);
+
+    const result = paginate(employees, total, pag);
+    await setCache(cacheKey, result, 15_000);
+    return success(result, 200, 15);
+  } catch (err) {
+    return error("Failed to fetch employees", 500);
   }
 }
 
 export async function POST(request: Request) {
+  const rateLimitResult = withRateLimit(request, 30, 60_000);
+  if (rateLimitResult) return rateLimitResult.response;
+
   try {
     const body = await request.json();
+    const parsed = employeeSchema.safeParse(body);
+    if (!parsed.success) {
+      return error("Validation failed", 400, parsed.error.flatten().fieldErrors);
+    }
 
     const count = await prisma.employee.count();
     const year = new Date().getFullYear();
     const seq = String(count + 1).padStart(3, "0");
-    const staffCategory = body.staffCategory || "academic";
-    const prefix = staffCategory === "academic" ? "FAC" : "STA";
+    const prefix = parsed.data.staffCategory === "academic" ? "FAC" : "STA";
     const employeeId = `${prefix}/${year}/${seq}`;
 
     const employee = await prisma.employee.create({
-      data: {
-        employeeId,
-        staffCategory: body.staffCategory,
-        title: body.title,
-        lastName: body.lastName,
-        firstName: body.firstName,
-        middleName: body.middleName || null,
-        gender: body.gender,
-        dateOfBirth: body.dateOfBirth ? new Date(body.dateOfBirth) : null,
-        phone: body.phone || null,
-        email: body.email,
-        address: body.address || null,
-        faculty: body.faculty || null,
-        school: body.school || null,
-        department: body.department || null,
-        designation: body.designation,
-        employmentType: body.employmentType,
-        dateOfEmployment: body.dateOfEmployment ? new Date(body.dateOfEmployment) : null,
-        qualification: body.qualification || null,
-        specialization: body.specialization || null,
-        nextOfKinName: body.nextOfKinName || null,
-        nextOfKinPhone: body.nextOfKinPhone || null,
-        nextOfKinRelation: body.nextOfKinRelation || null,
-      },
+      data: { ...parsed.data, employeeId, dateOfBirth: parsed.data.dateOfBirth ? new Date(parsed.data.dateOfBirth) : null, dateOfEmployment: parsed.data.dateOfEmployment ? new Date(parsed.data.dateOfEmployment) : null },
     });
 
-    return NextResponse.json({ employee }, { status: 201 });
-  } catch (error) {
-    const message = error instanceof Error ? error.message : "Failed to create employee";
-    return NextResponse.json({ error: message }, { status: 500 });
+    return success({ employee }, 201);
+  } catch (err) {
+    const message = err instanceof Error ? err.message : "Failed to create employee";
+    return error(message, 500);
   }
 }

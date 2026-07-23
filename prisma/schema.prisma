@@ -50,6 +50,11 @@ model Employee {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   attendances Attendance[]
+
+  @@index([status])
+  @@index([department])
+  @@index([staffCategory])
+  @@index([lastName, firstName])
 }
 
 model WorkSchedule {
@@ -75,4 +80,15 @@ model Attendance {
   updatedAt  DateTime @updatedAt
 
   @@unique([employeeId, date])
+  @@index([date])
+  @@index([status])
+  @@index([date, status])
+}
+
+model Cache {
+  key       String   @id
+  value     String
+  expiresAt DateTime
+
+  @@index([expiresAt])
 }
