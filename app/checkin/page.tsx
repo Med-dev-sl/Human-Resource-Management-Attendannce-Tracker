@@ -26,6 +26,7 @@ function CheckinContent() {
   const [message, setMessage] = useState("");
   const [workHours, setWorkHours] = useState<string>("");
   const [withinHours, setWithinHours] = useState(true);
+  const [qrSvg, setQrSvg] = useState("");
   const [result, setResult] = useState<{
     message: string; action: string; employee: { name: string; employeeId: string };
     attendance: { checkIn?: string; checkOut?: string; status?: string };
@@ -38,22 +39,45 @@ function CheckinContent() {
 
   useEffect(() => {
     const interval = setInterval(tick, 1000);
-    fetch("/api/settings/schedule")
-      .then((r) => r.json())
-      .then((data) => {
-        if (data.schedule) {
-          setWorkHours(`${data.schedule.startTime} - ${data.schedule.endTime}`);
-          const now = new Date();
-          const nowMin = now.getHours() * 60 + now.getMinutes();
-          const [sh, sm] = data.schedule.startTime.split(":").map(Number);
-          const [eh, em] = data.schedule.endTime.split(":").map(Number);
-          const startMin = sh * 60 + sm;
-          const endMin = eh * 60 + em;
-          setWithinHours(nowMin >= startMin && nowMin < endMin);
-        }
-      })
-      .catch(() => {});
-    return () => clearInterval(interval);
+
+    function checkSchedule() {
+      fetch("/api/settings/schedule")
+        .then((r) => r.json())
+        .then((data) => {
+          if (data.schedule) {
+            setWorkHours(`${data.schedule.startTime} - ${data.schedule.endTime}`);
+            const now = new Date();
+            const nowMin = now.getHours() * 60 + now.getMinutes();
+            const [sh, sm] = data.schedule.startTime.split(":").map(Number);
+            const [eh, em] = data.schedule.endTime.split(":").map(Number);
+            const startMin = sh * 60 + sm;
+            const endMin = eh * 60 + em;
+            const active = nowMin >= startMin && nowMin < endMin;
+            setWithinHours(active);
+          }
+        })
+        .catch(() => {});
+    }
+
+    function fetchQr() {
+      fetch("/api/attendance/qr-token")
+        .then((r) => r.json())
+        .then((data) => {
+          if (data.qrSvg) setQrSvg(data.qrSvg);
+        })
+        .catch(() => {});
+    }
+
+    checkSchedule();
+    fetchQr();
+    const scheduleTimer = setInterval(checkSchedule, 10000);
+    const qrTimer = setInterval(fetchQr, 30000);
+
+    return () => {
+      clearInterval(interval);
+      clearInterval(scheduleTimer);
+      clearInterval(qrTimer);
+    };
   }, [tick]);
 
   async function handleSubmit(e: React.FormEvent) {
@@ -119,6 +143,14 @@ function CheckinContent() {
                   </p>
                 )}
               </div>
+
+              {withinHours && qrSvg && (
+                <div className="flex justify-center py-2 animate-[fadeIn_0.6s_ease-out]">
+                  <div className="bg-white rounded-xl p-3 shadow-inner border border-gray-100">
+                    <div dangerouslySetInnerHTML={{ __html: qrSvg }} className="w-40 h-40" />
+                  </div>
+                </div>
+              )}
 
               <form onSubmit={handleSubmit} className="space-y-4">
                 <div>
@@ -237,6 +269,10 @@ function CheckinContent() {
         @keyframes fadeInUp {
           from { opacity: 0; transform: translateY(20px); }
           to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes fadeIn {
+          from { opacity: 0; }
+          to { opacity: 1; }
         }
       `}</style>
     </div>
