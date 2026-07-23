@@ -136,12 +136,12 @@ export default function LandingPage() {
                 >
                   Access Dashboard
                 </Link>
-                <a
-                  href="#features"
+                <Link
+                  href="/checkin"
                   className="px-8 py-3.5 rounded-xl bg-white text-gray-700 font-semibold border border-gray-200 hover:border-gray-300 hover:shadow-sm hover:scale-[1.02] active:scale-[0.98] transition-all duration-300"
                 >
-                  Learn More
-                </a>
+                  Staff Check-In
+                </Link>
               </div>
 
               <div
@@ -214,12 +214,20 @@ export default function LandingPage() {
                 <p className="text-blue-200/70 mt-4 text-lg max-w-xl mx-auto">
                   Sign in to the admin dashboard to manage employees and track attendance.
                 </p>
-                <Link
-                  href="/login"
-                  className="inline-block mt-8 px-10 py-3.5 rounded-xl bg-white text-[#1e3a5f] font-semibold shadow-xl hover:shadow-2xl hover:scale-[1.02] active:scale-[0.98] transition-all duration-300"
-                >
-                  Sign In to Dashboard
-                </Link>
+                <div className="flex flex-wrap justify-center gap-4 mt-8">
+                  <Link
+                    href="/login"
+                    className="inline-block px-10 py-3.5 rounded-xl bg-white text-[#1e3a5f] font-semibold shadow-xl hover:shadow-2xl hover:scale-[1.02] active:scale-[0.98] transition-all duration-300"
+                  >
+                    Sign In to Dashboard
+                  </Link>
+                  <Link
+                    href="/checkin"
+                    className="inline-block px-10 py-3.5 rounded-xl border border-white/20 text-white font-semibold hover:bg-white/10 hover:scale-[1.02] active:scale-[0.98] transition-all duration-300"
+                  >
+                    Staff Check-In
+                  </Link>
+                </div>
               </div>
             </div>
           </div>

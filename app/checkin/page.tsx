@@ -38,17 +38,11 @@ function CheckinContent() {
   }, [tick]);
 
   useEffect(() => {
-    if (!token) {
-      setStep("error");
-      setMessage("Invalid QR code. Please scan again.");
-      return;
-    }
     setStep("form");
   }, [token]);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    if (!token) return;
     setSubmitting(true);
     setMessage("");
 

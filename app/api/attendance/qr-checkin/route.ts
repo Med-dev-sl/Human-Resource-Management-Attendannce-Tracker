@@ -7,13 +7,15 @@ export async function POST(request: Request) {
   try {
     const { token, employeeId } = await request.json();
 
-    if (!token || !employeeId) {
-      return NextResponse.json({ error: "Token and employee ID are required" }, { status: 400 });
+    if (!employeeId) {
+      return NextResponse.json({ error: "Employee ID is required" }, { status: 400 });
     }
 
-    const valid = await isValidToken(token);
-    if (!valid) {
-      return NextResponse.json({ error: "QR code has expired or is invalid" }, { status: 401 });
+    if (token) {
+      const valid = await isValidToken(token);
+      if (!valid) {
+        return NextResponse.json({ error: "QR code has expired or is invalid" }, { status: 401 });
+      }
     }
 
     const employee = await prisma.employee.findFirst({
