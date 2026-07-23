@@ -84,12 +84,6 @@ export default function LandingPage() {
           <Logo className="h-8 w-auto" />
           <div className="flex items-center gap-3">
             <Link
-              href="/checkin"
-              className="px-5 py-2 rounded-xl bg-white text-gray-600 text-sm font-semibold border border-gray-200 hover:border-gray-300 hover:shadow-sm hover:scale-[1.02] active:scale-[0.98] transition-all duration-300"
-            >
-              Staff Check-In
-            </Link>
-            <Link
               href="/login"
               className="px-5 py-2 rounded-xl bg-[#1e3a5f] text-white text-sm font-semibold hover:bg-[#162d4a] hover:shadow-lg hover:scale-[1.02] active:scale-[0.98] transition-all duration-300"
             >
@@ -141,12 +135,6 @@ export default function LandingPage() {
                   className="px-8 py-3.5 rounded-xl bg-[#1e3a5f] text-white font-semibold shadow-lg shadow-[#1e3a5f]/20 hover:bg-[#162d4a] hover:shadow-xl hover:scale-[1.02] active:scale-[0.98] transition-all duration-300"
                 >
                   Access Dashboard
-                </Link>
-                <Link
-                  href="/checkin"
-                  className="px-8 py-3.5 rounded-xl bg-white text-gray-700 font-semibold border border-gray-200 hover:border-gray-300 hover:shadow-sm hover:scale-[1.02] active:scale-[0.98] transition-all duration-300"
-                >
-                  Staff Check-In
                 </Link>
               </div>
 
@@ -226,12 +214,6 @@ export default function LandingPage() {
                     className="inline-block px-10 py-3.5 rounded-xl bg-white text-[#1e3a5f] font-semibold shadow-xl hover:shadow-2xl hover:scale-[1.02] active:scale-[0.98] transition-all duration-300"
                   >
                     Sign In to Dashboard
-                  </Link>
-                  <Link
-                    href="/checkin"
-                    className="inline-block px-10 py-3.5 rounded-xl border border-white/20 text-white font-semibold hover:bg-white/10 hover:scale-[1.02] active:scale-[0.98] transition-all duration-300"
-                  >
-                    Staff Check-In
                   </Link>
                 </div>
               </div>

@@ -19,7 +19,7 @@ export function getStatusForCheckIn(
   const lateThreshold = startMinutes + schedule.lateMinutes;
 
   if (nowMinutes > startMinutes + schedule.absentMinutes) return "absent";
-  if (nowMinutes > lateThreshold) return "late";
+  if (nowMinutes >= lateThreshold) return "late";
   return "present";
 }
 
