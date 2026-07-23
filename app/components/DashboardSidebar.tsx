@@ -40,6 +40,23 @@ const navItems = [
     ),
   },
   {
+    label: "QR Check-In",
+    href: "/dashboard/qr-checkin",
+    icon: (
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5">
+        <rect x="3" y="3" width="5" height="5" />
+        <rect x="16" y="3" width="5" height="5" />
+        <rect x="3" y="16" width="5" height="5" />
+        <rect x="12" y="12" width="3" height="3" />
+        <line x1="21" y1="12" x2="21" y2="12" /><line x1="12" y1="21" x2="12" y2="21" />
+        <line x1="12" y1="16" x2="12" y2="12" /><line x1="16" y1="12" x2="12" y2="12" />
+        <line x1="3" y1="12" x2="3" y2="12" /><line x1="12" y1="3" x2="12" y2="3" />
+        <line x1="21" y1="16" x2="21" y2="21" /><line x1="16" y1="21" x2="21" y2="21" />
+        <line x1="3" y1="12" x2="3" y2="12" /><line x1="12" y1="3" x2="12" y2="3" />
+      </svg>
+    ),
+  },
+  {
     label: "Settings",
     href: "/dashboard/settings",
     icon: (
