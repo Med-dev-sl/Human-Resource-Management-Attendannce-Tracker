@@ -1,5 +1,6 @@
-import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
+import { success, error, withRateLimit } from "@/lib/api-utils";
+import { scheduleSchema } from "@/lib/validation";
 
 export async function GET() {
   try {
@@ -7,40 +8,50 @@ export async function GET() {
     if (!schedule) {
       schedule = await prisma.workSchedule.create({ data: {} });
     }
-    return NextResponse.json({ schedule });
+    return success({ schedule }, 200, 60);
   } catch {
-    return NextResponse.json({ error: "Failed to fetch schedule" }, { status: 500 });
+    return error("Failed to fetch schedule", 500);
   }
 }
 
 export async function PUT(request: Request) {
+  const rateLimited = withRateLimit(request, 30, 60_000);
+  if (rateLimited) return rateLimited.response;
+
   try {
     const body = await request.json();
-    let schedule = await prisma.workSchedule.findFirst();
-    if (schedule) {
-      schedule = await prisma.workSchedule.update({
-        where: { id: schedule.id },
-        data: {
-          startTime: body.startTime,
-          endTime: body.endTime,
-          lateMinutes: parseInt(body.lateMinutes) || 30,
-          absentMinutes: parseInt(body.absentMinutes) || 120,
-          workDays: body.workDays || "MON-FRI",
-        },
-      });
-    } else {
-      schedule = await prisma.workSchedule.create({
-        data: {
-          startTime: body.startTime || "08:00",
-          endTime: body.endTime || "17:00",
-          lateMinutes: parseInt(body.lateMinutes) || 30,
-          absentMinutes: parseInt(body.absentMinutes) || 120,
-          workDays: body.workDays || "MON-FRI",
-        },
-      });
+    const parsed = scheduleSchema.safeParse(body);
+    if (!parsed.success) {
+      return error("Validation failed", 400, parsed.error.flatten().fieldErrors);
     }
-    return NextResponse.json({ schedule });
+
+    const existing = await prisma.workSchedule.findFirst();
+
+    if (existing) {
+      const schedule = await prisma.workSchedule.update({
+        where: { id: existing.id },
+        data: {
+          startTime: parsed.data.startTime,
+          endTime: parsed.data.endTime,
+          lateMinutes: parsed.data.lateMinutes,
+          absentMinutes: parsed.data.absentMinutes,
+          workDays: parsed.data.workDays || "MON-FRI",
+        },
+      });
+      return success({ schedule });
+    }
+
+    const schedule = await prisma.workSchedule.create({
+      data: {
+        startTime: parsed.data.startTime,
+        endTime: parsed.data.endTime,
+        lateMinutes: parsed.data.lateMinutes,
+        absentMinutes: parsed.data.absentMinutes,
+        workDays: parsed.data.workDays || "MON-FRI",
+      },
+    });
+    return success({ schedule });
   } catch {
-    return NextResponse.json({ error: "Failed to update schedule" }, { status: 500 });
+    return error("Failed to update schedule", 500);
   }
 }

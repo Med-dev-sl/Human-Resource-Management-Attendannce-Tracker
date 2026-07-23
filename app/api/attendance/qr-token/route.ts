@@ -1,21 +1,22 @@
-import { NextResponse } from "next/server";
 import QRCode from "qrcode";
-import { generateToken, isValidToken } from "@/lib/qr-token";
+import { generateToken } from "@/lib/qr-token";
 import { getWorkSchedule, parseTime } from "@/lib/schedule";
+import { success, error, withRateLimit } from "@/lib/api-utils";
 
 export async function GET(request: Request) {
+  const rateLimited = withRateLimit(request, 30, 60_000);
+  if (rateLimited) return rateLimited.response;
+
   try {
     const now = new Date();
     const schedule = await getWorkSchedule();
     const nowMinutes = now.getHours() * 60 + now.getMinutes();
     const startMinutes = parseTime(schedule.startTime);
     const endMinutes = parseTime(schedule.endTime);
-
     const isWithinHours = nowMinutes >= startMinutes && nowMinutes < endMinutes;
-    const valid = isWithinHours;
 
-    if (!valid) {
-      return NextResponse.json({
+    if (!isWithinHours) {
+      return success({
         valid: false,
         message: `QR code is only active during work hours (${schedule.startTime} - ${schedule.endTime})`,
         currentTime: now.toLocaleTimeString(),
@@ -29,23 +30,19 @@ export async function GET(request: Request) {
     const checkinUrl = `${baseUrl}/checkin?token=${token}`;
 
     const qrSvg = await QRCode.toString(checkinUrl, {
-      type: "svg",
-      margin: 2,
-      width: 300,
+      type: "svg", margin: 2, width: 300,
       color: { dark: "#0f1a2e", light: "#ffffff" },
     });
 
-    return NextResponse.json({
-      valid: true,
-      token,
-      url: checkinUrl,
-      qrSvg,
-      generatedAt: now.toISOString(),
-      expiresAt: new Date(now.getFullYear(), now.getMonth(), now.getDate(), endMinutes / 60, endMinutes % 60).toISOString(),
+    const expiresAt = new Date(now.getFullYear(), now.getMonth(), now.getDate(), Math.floor(endMinutes / 60), endMinutes % 60).toISOString();
+
+    return success({
+      valid: true, token, url: checkinUrl, qrSvg,
+      generatedAt: now.toISOString(), expiresAt,
       currentTime: now.toLocaleTimeString(),
       date: now.toLocaleDateString(),
-    });
+    }, 200, 5);
   } catch {
-    return NextResponse.json({ error: "Failed to generate QR code" }, { status: 500 });
+    return error("Failed to generate QR code", 500);
   }
 }

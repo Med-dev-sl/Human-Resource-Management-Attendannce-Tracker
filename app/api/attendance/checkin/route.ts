@@ -1,17 +1,19 @@
-import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { getWorkSchedule, getStatusForCheckIn } from "@/lib/schedule";
+import { success, error, withRateLimit } from "@/lib/api-utils";
 
 export async function POST(request: Request) {
+  const rateLimited = withRateLimit(request, 60, 60_000);
+  if (rateLimited) return rateLimited.response;
+
   try {
     const { employeeId } = await request.json();
-
-    const employee = await prisma.employee.findUnique({
-      where: { id: employeeId },
-    });
-    if (!employee) {
-      return NextResponse.json({ error: "Employee not found" }, { status: 404 });
+    if (!employeeId || typeof employeeId !== "string") {
+      return error("Employee ID is required", 400);
     }
+
+    const employee = await prisma.employee.findUnique({ where: { id: employeeId } });
+    if (!employee) return error("Employee not found", 404);
 
     const startOfDay = new Date();
     startOfDay.setHours(0, 0, 0, 0);
@@ -19,31 +21,20 @@ export async function POST(request: Request) {
     endOfDay.setHours(23, 59, 59, 999);
 
     const existing = await prisma.attendance.findFirst({
-      where: {
-        employeeId,
-        date: { gte: startOfDay, lte: endOfDay },
-      },
+      where: { employeeId, date: { gte: startOfDay, lte: endOfDay } },
     });
-
-    if (existing) {
-      return NextResponse.json({ error: "Already checked in today" }, { status: 409 });
-    }
+    if (existing) return error("Already checked in today", 409);
 
     const schedule = await getWorkSchedule();
     const now = new Date();
     const status = getStatusForCheckIn(now, schedule);
 
     const attendance = await prisma.attendance.create({
-      data: {
-        employeeId,
-        date: now,
-        checkIn: now,
-        status,
-      },
+      data: { employeeId, date: now, checkIn: now, status },
     });
 
-    return NextResponse.json({ attendance }, { status: 201 });
+    return success({ attendance }, 201);
   } catch {
-    return NextResponse.json({ error: "Failed to check in" }, { status: 500 });
+    return error("Failed to check in", 500);
   }
 }

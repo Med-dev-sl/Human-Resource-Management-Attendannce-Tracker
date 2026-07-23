@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
 
@@ -31,8 +31,15 @@ const playfairDisplay = localFont({
 });
 
 export const metadata: Metadata = {
-  title: "ETUSL Human Resource Management Attendance",
+  title: {
+    default: "ETUSL Human Resource Management Attendance",
+    template: "%s | ETUSL HR",
+  },
   description: "An Attendance Tracker that tracks employee attendance",
+};
+
+export const viewport: Viewport = {
+  themeColor: "#0f1a2e",
 };
 
 export default function RootLayout({
@@ -46,6 +53,10 @@ export default function RootLayout({
       lang="en"
       className={`${notoSans.variable} ${playfairDisplay.variable} h-full antialiased`}
     >
+      <head>
+        <meta charSet="utf-8" />
+        <link rel="icon" href="/favicon.ico" />
+      </head>
       <body className="min-h-full flex flex-col font-sans">{children}</body>
     </html>
   );

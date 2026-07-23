@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import bcrypt from "bcryptjs";
 import { prisma } from "@/lib/prisma";
 import { loginSchema } from "@/lib/validation";
-import { success, error, withRateLimit, unauthorized } from "@/lib/api-utils";
+import { success, error, withRateLimit } from "@/lib/api-utils";
 import { securityHeaders } from "@/lib/security";
 
 export async function POST(request: Request) {
@@ -21,10 +21,10 @@ export async function POST(request: Request) {
       select: { id: true, email: true, name: true, role: true, password: true },
     });
 
-    if (!user) return unauthorized("Invalid email or password");
+    if (!user) return error("Invalid email or password", 401);
 
     const isValid = await bcrypt.compare(parsed.data.password, user.password);
-    if (!isValid) return unauthorized("Invalid email or password");
+    if (!isValid) return error("Invalid email or password", 401);
 
     const response = NextResponse.json({
       user: { id: user.id, email: user.email, name: user.name, role: user.role },

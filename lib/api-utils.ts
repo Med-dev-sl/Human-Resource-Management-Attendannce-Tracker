@@ -10,18 +10,8 @@ export function success<T>(data: T, status = 200, maxAge?: number) {
 }
 
 export function error(message: string, status = 400, details?: unknown) {
-  return NextResponse.json(
-    { error: message, ...(details ? { details } : {}) },
-    { status, headers: securityHeaders() }
-  );
-}
-
-export function unauthorized(message = "Unauthorized") {
-  return error(message, 401);
-}
-
-export function forbidden(message = "Forbidden") {
-  return error(message, 403);
+  const body = details ? { error: message, details } : { error: message };
+  return NextResponse.json(body, { status, headers: securityHeaders() });
 }
 
 export function notFound(message = "Not found") {
@@ -32,11 +22,15 @@ export function withRateLimit(request: Request, maxRequests = 60, windowMs = 60_
   const ip = getClientIp(request);
   const result = rateLimit(`api:${ip}`, maxRequests, windowMs);
   if (!result.allowed) {
+    const headers: Record<string, string> = {
+      ...securityHeaders(),
+      "Retry-After": String(Math.ceil((result.resetAt - Date.now()) / 1000)),
+    };
     return {
-      response: error("Too many requests. Please try again later.", 429),
-      headers: {
-        "Retry-After": String(Math.ceil((result.resetAt - Date.now()) / 1000)),
-      },
+      response: NextResponse.json(
+        { error: "Too many requests. Please try again later." },
+        { status: 429, headers }
+      ),
     };
   }
   return null;

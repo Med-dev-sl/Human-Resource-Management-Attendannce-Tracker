@@ -1,24 +1,25 @@
-import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
+import { success, error, withRateLimit } from "@/lib/api-utils";
+import { employeeSchema } from "@/lib/validation";
+import { requireAdmin } from "@/lib/get-user";
 
 export async function GET(
-  _request: Request,
+  request: Request,
   { params }: { params: Promise<{ id: string }> }
 ) {
+  const rateLimited = withRateLimit(request, 120, 60_000);
+  if (rateLimited) return rateLimited.response;
+
   try {
     const { id } = await params;
     const employee = await prisma.employee.findUnique({
       where: { id },
-      include: {
-        attendances: { orderBy: { date: "desc" }, take: 30 },
-      },
+      include: { attendances: { orderBy: { date: "desc" }, take: 30 } },
     });
-    if (!employee) {
-      return NextResponse.json({ error: "Employee not found" }, { status: 404 });
-    }
-    return NextResponse.json({ employee });
+    if (!employee) return error("Employee not found", 404);
+    return success({ employee });
   } catch {
-    return NextResponse.json({ error: "Failed to fetch employee" }, { status: 500 });
+    return error("Failed to fetch employee", 500);
   }
 }
 
@@ -26,50 +27,53 @@ export async function PUT(
   request: Request,
   { params }: { params: Promise<{ id: string }> }
 ) {
+  const rateLimited = withRateLimit(request, 30, 60_000);
+  if (rateLimited) return rateLimited.response;
+
   try {
+    await requireAdmin(request);
     const { id } = await params;
     const body = await request.json();
+    const parsed = employeeSchema.safeParse(body);
+    if (!parsed.success) {
+      return error("Validation failed", 400, parsed.error.flatten().fieldErrors);
+    }
+
     const employee = await prisma.employee.update({
       where: { id },
       data: {
-        staffCategory: body.staffCategory,
-        title: body.title,
-        lastName: body.lastName,
-        firstName: body.firstName,
-        middleName: body.middleName || null,
-        gender: body.gender,
-        dateOfBirth: body.dateOfBirth ? new Date(body.dateOfBirth) : null,
-        phone: body.phone || null,
-        email: body.email,
-        address: body.address || null,
-        faculty: body.faculty || null,
-        school: body.school || null,
-        department: body.department || null,
-        designation: body.designation,
-        employmentType: body.employmentType,
-        dateOfEmployment: body.dateOfEmployment ? new Date(body.dateOfEmployment) : null,
-        qualification: body.qualification || null,
-        specialization: body.specialization || null,
-        nextOfKinName: body.nextOfKinName || null,
-        nextOfKinPhone: body.nextOfKinPhone || null,
-        nextOfKinRelation: body.nextOfKinRelation || null,
+        ...parsed.data,
+        dateOfBirth: parsed.data.dateOfBirth ? new Date(parsed.data.dateOfBirth) : null,
+        dateOfEmployment: parsed.data.dateOfEmployment ? new Date(parsed.data.dateOfEmployment) : null,
       },
     });
-    return NextResponse.json({ employee });
-  } catch {
-    return NextResponse.json({ error: "Failed to update employee" }, { status: 500 });
+    return success({ employee });
+  } catch (err) {
+    if (err instanceof Error && (err as Error & { statusCode?: number }).statusCode) {
+      const authErr = err as Error & { statusCode: number };
+      return error(authErr.message, authErr.statusCode);
+    }
+    return error("Failed to update employee", 500);
   }
 }
 
 export async function DELETE(
-  _request: Request,
+  request: Request,
   { params }: { params: Promise<{ id: string }> }
 ) {
+  const rateLimited = withRateLimit(request, 15, 60_000);
+  if (rateLimited) return rateLimited.response;
+
   try {
+    await requireAdmin(request);
     const { id } = await params;
     await prisma.employee.delete({ where: { id } });
-    return NextResponse.json({ success: true });
-  } catch {
-    return NextResponse.json({ error: "Failed to delete employee" }, { status: 500 });
+    return success({ success: true });
+  } catch (err) {
+    if (err instanceof Error && (err as Error & { statusCode?: number }).statusCode) {
+      const authErr = err as Error & { statusCode: number };
+      return error(authErr.message, authErr.statusCode);
+    }
+    return error("Failed to delete employee", 500);
   }
 }
