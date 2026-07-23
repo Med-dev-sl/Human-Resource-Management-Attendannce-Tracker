@@ -3,7 +3,7 @@ import QRCode from "qrcode";
 import { generateToken, isValidToken } from "@/lib/qr-token";
 import { getWorkSchedule, parseTime } from "@/lib/schedule";
 
-export async function GET() {
+export async function GET(request: Request) {
   try {
     const now = new Date();
     const schedule = await getWorkSchedule();
@@ -24,7 +24,8 @@ export async function GET() {
     }
 
     const token = generateToken(now);
-    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
+    const url = new URL(request.url);
+    const baseUrl = `${url.protocol}//${url.host}`;
     const checkinUrl = `${baseUrl}/checkin?token=${token}`;
 
     const qrSvg = await QRCode.toString(checkinUrl, {
