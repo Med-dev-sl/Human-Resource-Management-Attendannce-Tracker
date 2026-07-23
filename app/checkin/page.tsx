@@ -24,8 +24,8 @@ function CheckinContent() {
   const [employeeId, setEmployeeId] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [message, setMessage] = useState("");
-  const [workHours, setWorkHours] = useState<string>("");
   const [withinHours, setWithinHours] = useState(true);
+  const [schedule, setSchedule] = useState<{ startTime: string; endTime: string } | null>(null);
   const [qrSvg, setQrSvg] = useState("");
   const [result, setResult] = useState<{
     message: string; action: string; employee: { name: string; employeeId: string };
@@ -33,51 +33,43 @@ function CheckinContent() {
   } | null>(null);
   const [time, setTime] = useState(new Date());
 
-  const tick = useCallback(() => {
-    setTime(new Date());
-  }, []);
+  const tick = useCallback(() => setTime(new Date()), []);
 
   useEffect(() => {
     const interval = setInterval(tick, 1000);
 
-    function checkSchedule() {
+    function loadData() {
       fetch("/api/settings/schedule")
         .then((r) => r.json())
         .then((data) => {
           if (data.schedule) {
-            setWorkHours(`${data.schedule.startTime} - ${data.schedule.endTime}`);
-            const now = new Date();
-            const nowMin = now.getHours() * 60 + now.getMinutes();
+            setSchedule(data.schedule);
+            const n = new Date();
+            const nowMin = n.getHours() * 60 + n.getMinutes();
             const [sh, sm] = data.schedule.startTime.split(":").map(Number);
             const [eh, em] = data.schedule.endTime.split(":").map(Number);
-            const startMin = sh * 60 + sm;
-            const endMin = eh * 60 + em;
-            const active = nowMin >= startMin && nowMin < endMin;
-            setWithinHours(active);
+            setWithinHours(nowMin >= sh * 60 + sm && nowMin < eh * 60 + em);
           }
-        })
-        .catch(() => {});
+        });
     }
 
     function fetchQr() {
       fetch("/api/attendance/qr-token")
         .then((r) => r.json())
         .then((data) => {
-          if (data.qrSvg) setQrSvg(data.qrSvg);
-        })
-        .catch(() => {});
+          if (data.qrSvg && data.valid) setQrSvg(data.qrSvg);
+          else if (!data.valid) setQrSvg("");
+        });
     }
 
-    checkSchedule();
+    loadData();
     fetchQr();
-    const scheduleTimer = setInterval(checkSchedule, 10000);
-    const qrTimer = setInterval(fetchQr, 30000);
+    const refresh = setInterval(() => {
+      loadData();
+      fetchQr();
+    }, 10000);
 
-    return () => {
-      clearInterval(interval);
-      clearInterval(scheduleTimer);
-      clearInterval(qrTimer);
-    };
+    return () => { clearInterval(interval); clearInterval(refresh); };
   }, [tick]);
 
   async function handleSubmit(e: React.FormEvent) {
@@ -107,6 +99,8 @@ function CheckinContent() {
     }
   }
 
+  const hrs = schedule ? `${schedule.startTime} - ${schedule.endTime}` : "";
+
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 via-white to-indigo-50 p-4">
       <div className="w-full max-w-md">
@@ -118,7 +112,7 @@ function CheckinContent() {
           <div className="animate-[fadeInUp_0.5s_ease-out]">
             <div className="bg-white/80 backdrop-blur-xl rounded-3xl shadow-2xl shadow-blue-200/50 border border-white/50 p-8 space-y-6">
               <div className="text-center">
-                <div className="text-5xl font-bold text-[#1e3a5f] tabular-nums tracking-tight font-mono">
+                <div className="text-4xl font-bold text-[#1e3a5f] tabular-nums tracking-tight font-mono">
                   {time.toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit", second: "2-digit", hour12: false })}
                 </div>
                 <p className="text-sm text-gray-500 mt-1.5">
@@ -128,61 +122,73 @@ function CheckinContent() {
                   {withinHours ? (
                     <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 text-emerald-600 text-xs font-semibold">
                       <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-                      Check-in available
+                      System Active
                     </span>
                   ) : (
                     <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-50 text-amber-600 text-xs font-semibold">
                       <span className="w-1.5 h-1.5 rounded-full bg-amber-500" />
-                      Outside work hours
+                      {schedule ? `Opens at ${schedule.startTime}` : "Outside work hours"}
                     </span>
                   )}
                 </div>
-                {workHours && (
-                  <p className="text-[11px] text-gray-400 mt-2">
-                    Work hours: {workHours}
-                  </p>
-                )}
+                {hrs && <p className="text-[11px] text-gray-400 mt-2">Work hours: {hrs}</p>}
               </div>
 
               {withinHours && qrSvg && (
-                <div className="flex justify-center py-2 animate-[fadeIn_0.6s_ease-out]">
+                <div className="flex justify-center animate-[fadeIn_0.6s_ease-out]">
                   <div className="bg-white rounded-xl p-3 shadow-inner border border-gray-100">
                     <div dangerouslySetInnerHTML={{ __html: qrSvg }} className="w-40 h-40" />
                   </div>
                 </div>
               )}
 
-              <form onSubmit={handleSubmit} className="space-y-4">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1.5">
-                    Staff Attendance ID
-                  </label>
-                  <input
-                    type="text"
-                    value={employeeId}
-                    onChange={(e) => setEmployeeId(e.target.value)}
-                    placeholder="Enter your Employee ID (e.g. FAC/2026/001)"
-                    required
-                    autoFocus
-                    className="w-full px-4 py-3.5 rounded-xl border border-gray-200 bg-white focus:border-blue-400 focus:ring-4 focus:ring-blue-100 outline-none transition-all duration-300 text-center text-lg font-medium tracking-wider"
-                  />
-                  <p className="text-xs text-gray-400 mt-1.5 text-center">
-                    Enter your staff ID to check in or out
+              {withinHours && (
+                <form onSubmit={handleSubmit} className="space-y-4 animate-[fadeIn_0.5s_ease-out]">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1.5">
+                      Staff Attendance ID
+                    </label>
+                    <input
+                      type="text"
+                      value={employeeId}
+                      onChange={(e) => setEmployeeId(e.target.value)}
+                      placeholder="Enter your Employee ID (e.g. FAC/2026/001)"
+                      required
+                      autoFocus
+                      className="w-full px-4 py-3.5 rounded-xl border border-gray-200 bg-white focus:border-blue-400 focus:ring-4 focus:ring-blue-100 outline-none transition-all duration-300 text-center text-lg font-medium tracking-wider"
+                    />
+                    <p className="text-xs text-gray-400 mt-1.5 text-center">
+                      Enter your staff ID to check in or out
+                    </p>
+                  </div>
+
+                  {message && <p className="text-red-500 text-sm text-center">{message}</p>}
+
+                  <button
+                    type="submit"
+                    disabled={submitting || !employeeId.trim()}
+                    className="w-full py-3.5 rounded-xl bg-[#1e3a5f] text-white font-semibold shadow-lg shadow-[#1e3a5f]/20 hover:bg-[#162d4a] hover:shadow-xl hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed text-lg"
+                  >
+                    {submitting ? "Processing..." : "Check In / Out"}
+                  </button>
+                </form>
+              )}
+
+              {!withinHours && (
+                <div className="text-center py-6 animate-[fadeIn_0.5s_ease-out]">
+                  <div className="w-14 h-14 rounded-full bg-amber-50 flex items-center justify-center mx-auto mb-3">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="w-6 h-6 text-amber-500">
+                      <circle cx="12" cy="12" r="10" /><polyline points="12 6 12 12 16 14" />
+                    </svg>
+                  </div>
+                  <p className="text-sm text-gray-500">
+                    Check-in is only available during work hours
+                  </p>
+                  <p className="text-xs text-gray-400 mt-1">
+                    {schedule ? `${schedule.startTime} — ${schedule.endTime}` : ""}
                   </p>
                 </div>
-
-                {message && (
-                  <p className="text-red-500 text-sm text-center">{message}</p>
-                )}
-
-                <button
-                  type="submit"
-                  disabled={submitting || !employeeId.trim() || !withinHours}
-                  className="w-full py-3.5 rounded-xl bg-[#1e3a5f] text-white font-semibold shadow-lg shadow-[#1e3a5f]/20 hover:bg-[#162d4a] hover:shadow-xl hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed text-lg"
-                >
-                  {submitting ? "Processing..." : !withinHours ? "Outside Work Hours" : "Check In / Out"}
-                </button>
-              </form>
+              )}
             </div>
           </div>
         )}
