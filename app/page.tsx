@@ -84,10 +84,16 @@ export default function LandingPage() {
           <Logo className="h-8 w-auto" />
           <div className="flex items-center gap-3">
             <Link
+              href="/checkin"
+              className="px-5 py-2 rounded-xl bg-white text-gray-600 text-sm font-semibold border border-gray-200 hover:border-gray-300 hover:shadow-sm hover:scale-[1.02] active:scale-[0.98] transition-all duration-300"
+            >
+              Staff Check-In
+            </Link>
+            <Link
               href="/login"
               className="px-5 py-2 rounded-xl bg-[#1e3a5f] text-white text-sm font-semibold hover:bg-[#162d4a] hover:shadow-lg hover:scale-[1.02] active:scale-[0.98] transition-all duration-300"
             >
-              Sign In
+              Admin Sign In
             </Link>
           </div>
         </div>

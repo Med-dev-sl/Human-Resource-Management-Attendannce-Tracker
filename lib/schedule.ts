@@ -22,3 +22,13 @@ export function getStatusForCheckIn(
   if (nowMinutes > lateThreshold) return "late";
   return "present";
 }
+
+export function isWithinWorkHours(
+  date: Date,
+  schedule: { startTime: string; endTime: string }
+): boolean {
+  const nowMinutes = date.getHours() * 60 + date.getMinutes();
+  const startMinutes = parseTime(schedule.startTime);
+  const endMinutes = parseTime(schedule.endTime);
+  return nowMinutes >= startMinutes && nowMinutes < endMinutes;
+}

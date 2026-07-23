@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { isValidToken } from "@/lib/qr-token";
-import { getWorkSchedule, getStatusForCheckIn } from "@/lib/schedule";
+import { getWorkSchedule, getStatusForCheckIn, isWithinWorkHours } from "@/lib/schedule";
 
 export async function POST(request: Request) {
   try {
@@ -9,6 +9,14 @@ export async function POST(request: Request) {
 
     if (!employeeId) {
       return NextResponse.json({ error: "Employee ID is required" }, { status: 400 });
+    }
+
+    const schedule = await getWorkSchedule();
+
+    if (!isWithinWorkHours(new Date(), schedule)) {
+      return NextResponse.json({
+        error: `Check-in/out is only available during work hours (${schedule.startTime} - ${schedule.endTime})`,
+      }, { status: 403 });
     }
 
     if (token) {
@@ -48,6 +56,10 @@ export async function POST(request: Request) {
     }
 
     if (existing && !existing.checkOut) {
+      if (!isWithinWorkHours(new Date(), schedule)) {
+        return NextResponse.json({ error: "Check-out is only available during work hours" }, { status: 403 });
+      }
+
       const updated = await prisma.attendance.update({
         where: { id: existing.id },
         data: { checkOut: new Date() },
@@ -64,7 +76,6 @@ export async function POST(request: Request) {
       });
     }
 
-    const schedule = await getWorkSchedule();
     const now = new Date();
     const status = getStatusForCheckIn(now, schedule);
 
